@@ -1,14 +1,18 @@
+import lenin from '../images/LENIN.jpg';
+
 export const data = [
    {
-      coord: [56.015396, 92.877934],
-      title: 'Табличка хуйни',
-      descr: 'Сделана в честь хуйни',
-      img: ''
+      coord: [92.877934, 56.015396],
+      title: 'lox',
+      adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
+      img: lenin,
+      descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'
    },
    {
-      coord: [56.015396, 92.877934],
-      title: 'Табличка хуйни 2',
-      descr: 'Сделана в честь хуйни 2',
-      img: ''
+      coord: [92.804156, 56.007981],
+      title: 'ydarnik',
+      adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
+      img: lenin,
+      descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'
    }
-]
+];

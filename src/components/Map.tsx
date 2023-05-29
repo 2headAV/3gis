@@ -9,6 +9,23 @@ import lenin from '../images/LENIN.jpg';
 const Map = () => {
    const [open, setOpen] = React.useState(false);
    const [markerData, setMarkerData] = React.useState<IMarkerData | null>(null)
+   const coords = [
+      {
+         coord: [92.877934, 56.015396],
+         title: 'lox',
+         adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
+         img: lenin,
+         descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'
+      },
+      {
+         coord: [92.804156, 56.007981],
+         title: 'ydarnik',
+         adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
+         img: lenin,
+         descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'
+      }
+   ];
+
    useEffect(() => {
       let map: any;
       load().then((mapglAPI) => {
@@ -17,20 +34,34 @@ const Map = () => {
             zoom: 13,
             key: '042b5b75-f847-4f2a-b695-b5f58adc9dfd',
          });
+         coords.forEach((coord) => {
+            const marker = new mapglAPI.Marker(map, {
+               coordinates: coord.coord,
+               userData: {
+                  title: coord.title,
+                  img: coord.img,
+                  descr: coord.descr
+               }
+            });
+            marker.on('click', (e) => {
+               setMarkerData(e.targetData.userData)
+               setOpen(true);
+            });
+         });
 
-         const marker = new mapglAPI.Marker(map, {
-            coordinates: [92.877934, 56.015396],
-            userData: {
-               title: 'lox',
-               adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
-               img: lenin,
-               descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-            }
-         });
-         marker.on('click', (e) => {
-            setMarkerData(e.targetData.userData)
-            setOpen(true);
-         });
+         // const marker = new mapglAPI.Marker(map, {
+         //    coordinates: [92.877934, 56.015396],
+         //    userData: {
+         //       title: 'lox',
+         //       adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
+         //       img: lenin,
+         //       descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+         //    }
+         // });
+         // marker.on('click', (e) => {
+         //    setMarkerData(e.targetData.userData)
+         //    setOpen(true);
+         // });
       });
 
       return () => map && map.destroy();
