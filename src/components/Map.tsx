@@ -1,10 +1,16 @@
+import React, { FC, useEffect } from 'react';
 import { load } from '@2gis/mapgl';
-import { useEffect } from 'react';
-import MapWrapper from '../components/MapWrapper';
+import { Clusterer } from '@2gis/mapgl-clusterer';
 import { Drawer } from 'rsuite';
-import React from 'react';
-import { IMarkerData } from '../types';
+
 import lenin from '../images/LENIN.jpg';
+
+import Popup from './Popup';
+import MapWrapper from '../components/MapWrapper';
+import qqq from '../images/qqq.jpg';
+
+import { IMarkerData } from '../types/marker.types';
+
 import larionovs from '../images/LARIONOVS.jpg';
 import nikiforova from '../images/NIKIFOROVA.jpg';
 import veterans from '../images/VETERANS.jpg';
@@ -83,18 +89,44 @@ import yacobs from '../images/YACOBS.jpg';
 import yaril from '../images/YARIL.jpg';
 import zased from '../images/ZASED.jpg';
 
-const Map = () => {
+
+const Map: FC = () => {
    const [open, setOpen] = React.useState(false);
-   const [markerData, setMarkerData] = React.useState<IMarkerData | null>(null)
+   const [markerData, setMarkerData] = React.useState<any>(null)
+   const [openPopup, setOpenPopup] = React.useState<boolean>(false)
+   // const [markerData, setMarkerData] = React.useState<IMarkerData | null>(null)
+
    const coords = [
       {
+
+         coordinates: [92.877934, 56.015396],
+         title: 'lox',
+         adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
+
          coord: [92.877934, 56.015396],
          title: 'Памятная доска В.И. Ленину',
          adress: 'Марковского, 27 ',
+
          img: lenin,
          descr: 'В этом доме Владимир Ильич Ленин Работал в марте - апреле 1897 г.'
       },
       {
+
+         coordinates: [92.804156, 56.007981],
+         title: 'ydarnik',
+         adress: 'ул.Академика Киренского, д.33',
+         img: qqq,
+         descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'
+      },
+      {
+         coordinates: [92.799956, 56.007981],
+         title: 'ydarnik',
+         adress: 'ул.Академика Киренского, д.33',
+         img: qqq,
+         descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore'
+      }
+   ];
+
          coord: [92.889726, 56.014412],
          title: 'Дом жилой 1820-1830 гг.',
          adress: 'ул. Ленина, 3, стр. 1',
@@ -642,6 +674,23 @@ const Map = () => {
       },
       ];
 
+
+   function calculateAverage(matrix: number[][]) {
+      const averages = [];
+
+      for (let i = 0; i < matrix[0].length; i++) {
+         let sum = 0;
+         for (let j = 0; j < matrix.length; j++) {
+            sum += matrix[j][i];
+         }
+         const average = sum / matrix.length;
+         averages.push(average);
+      }
+
+      return averages;
+   }
+
+
    useEffect(() => {
       let map: any;
       load().then((mapglAPI) => {
@@ -650,56 +699,64 @@ const Map = () => {
             zoom: 13,
             key: '042b5b75-f847-4f2a-b695-b5f58adc9dfd',
          });
-         coords.forEach((coord) => {
-            const marker = new mapglAPI.Marker(map, {
-               coordinates: coord.coord,
-               userData: {
-                  title: coord.title,
-                  img: coord.img,
-                  descr: coord.descr
-               }
-            });
-            marker.on('click', (e) => {
-               setMarkerData(e.targetData.userData)
+
+         const clusterer = new Clusterer(map, {
+            radius: 100,
+
+         });
+         clusterer.load(coords);
+         clusterer.on('click', (event) => {
+            if (Array.isArray(event.target.data)) {
+               let centerCoord: number[][] = []
+               event.target.data.forEach((el) => centerCoord.push(el.coordinates))
+               map.setCenter(calculateAverage(centerCoord))
+               map.setZoom(15, { duration: 500, easing: "easeInQuint" })
+            } else {
+               setMarkerData(event.target.data)
                setOpen(true);
-            });
+            }
          });
 
-         // const marker = new mapglAPI.Marker(map, {
-         //    coordinates: [92.877934, 56.015396],
-         //    userData: {
-         //       title: 'lox',
-         //       adress: 'adressadressadressadressadressadressad ressadressadressadressadressadress',
-         //       img: lenin,
-         //       descr: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-         //    }
-         // });
-         // marker.on('click', (e) => {
-         //    setMarkerData(e.targetData.userData)
-         //    setOpen(true);
-         // });
+         const control = new mapglAPI.Control(map, `<button class="about__project">О проекте</button>`, {
+            position: 'bottomLeft',
+         });
+         control!
+            .getContainer()!
+            .querySelector('button')!
+            .addEventListener('click', (event) => {
+               setOpenPopup(prev => !prev)
+            });
       });
 
       return () => map && map.destroy();
    }, []);
 
+
    return (
       <>
-         <div style={{ width: '100%', height: '100%' }}>
+         <div className='map'>
             <MapWrapper />
          </div>
          <Drawer placement='left' open={open} onClose={() => setOpen(false)}>
             <Drawer.Header>
-               <Drawer.Title>{markerData?.title}</Drawer.Title>
+               <Drawer.Title className='map__title'>{markerData?.title}</Drawer.Title>
             </Drawer.Header>
             <Drawer.Body>
-               <div>{markerData?.adress}</div>
+               <div className='map__adress'>{markerData?.adress}</div>
                <div className='marker__img'>
                   <img src={markerData?.img} alt="#" />
                </div>
+
+               <div className='map__descr' >{markerData?.descr}</div>
+
                <div style={{whiteSpace: 'pre-line'}}>{markerData?.descr}</div>
+
             </Drawer.Body>
          </Drawer>
+         {
+            openPopup && <><div className="popup__wrapper"></div><Popup setOpenPopup={setOpenPopup} /></>
+         }
+
       </>
    );
 }

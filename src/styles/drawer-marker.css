@@ -1,6 +1,7 @@
 .marker__img{
    margin: 0 auto;
-   max-width: 210px;
+   width: 450px;
+   height: 400px;
 }
 .marker__img img{
    width: 100%;
