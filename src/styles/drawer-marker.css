@@ -8,3 +8,7 @@
    height: 100%;
    object-fit: contain;
 }
+.rs-drawer-header{
+   width: fit-content;
+   
+}
