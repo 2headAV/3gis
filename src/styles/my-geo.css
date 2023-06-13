@@ -1,0 +1,16 @@
+.button {
+   background-color: inherit;
+   border-radius: 15px;
+   border: 2px solid black;
+   transition: all 0.3s ease;
+}
+
+.button svg {
+   margin-top: 4px;
+}
+
+.button:hover {
+   transition: all 0.3s ease;
+   background-color: black;
+   color: white;
+}
