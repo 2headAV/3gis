@@ -12,7 +12,9 @@ const Map: FC = () => {
    const [open, setOpen] = React.useState(false)
    const [markerData, setMarkerData] = React.useState<any>(null)
    const [openPopup, setOpenPopup] = React.useState<boolean>(false)
+
    const windowWidth = window.innerWidth
+
 
    function calculateAverage(matrix: number[][]) {
       const averages = []
@@ -34,7 +36,7 @@ const Map: FC = () => {
       load().then((mapglAPI) => {
          map = new mapglAPI.Map('map-container', {
             center: [92.877934, 56.015396],
-            zoom: 13,
+            zoom: 15,
             key: '042b5b75-f847-4f2a-b695-b5f58adc9dfd',
          })
 

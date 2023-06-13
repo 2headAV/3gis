@@ -16,9 +16,9 @@ const Popup: FC<IPopup> = ({ setOpenPopup }) => {
 
    return (
       <div className="popup" ref={ref}>
-         <div className="popup__title">Тема ВКР .....</div>
-         <div className="popup__student">Выпускник: Сунцов Илья ....</div>
-         <div className="popup__descr">Краткое описание .... . ........ . ....... ...... ...... .......... ...... .. . ..... .....</div>
+         <div className="popup__title">Тема ВКР: Создание интерактивного гида по мемориальным доскам центрального района г. Красноярск</div>
+         <div className="popup__student">Выпускник: Сунцов Илья Сергеевич</div>
+         <div className="popup__descr">Краткое описание: В данной работе вы можете увидеть краткую информацию о мемориальных досках центрального района г. Красноярск, их фотографии, а также местоположении.</div>
       </div>
    )
 }
