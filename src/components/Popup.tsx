@@ -3,7 +3,6 @@ import { useOnClickOutside } from 'usehooks-ts'
 import { IPopup } from '../types/popup.types'
 
 
-
 const Popup: FC<IPopup> = ({ setOpenPopup }) => {
 
    const ref = useRef(null)
