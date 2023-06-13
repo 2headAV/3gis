@@ -14,7 +14,6 @@ const Map: FC = () => {
    const [open, setOpen] = React.useState(false);
    const [markerData, setMarkerData] = React.useState<any>(null)
    const [openPopup, setOpenPopup] = React.useState<boolean>(false)
-   // const [markerData, setMarkerData] = React.useState<IMarkerData | null>(null)
 
 
    function calculateAverage(matrix: number[][]) {
@@ -38,14 +37,17 @@ const Map: FC = () => {
       load().then((mapglAPI) => {
          map = new mapglAPI.Map('map-container', {
             center: [92.877934, 56.015396],
-            zoom: 13,
+            zoom: 15,
             key: '042b5b75-f847-4f2a-b695-b5f58adc9dfd',
+            style: '077ff027-e85a-45be-8da8-77a0ee623e16',
          });
+         
+         
 
          const clusterer = new Clusterer(map, {
             radius: 40,
-
          });
+         
          clusterer.load(coordinates);
          clusterer.on('click', (event) => {
             if (Array.isArray(event.target.data)) {
